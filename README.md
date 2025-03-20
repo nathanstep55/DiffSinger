@@ -4,6 +4,7 @@ With the recent release of [PC-NSF-HiFiGAN](https://github.com/openvpi/vocoders/
 with reasonably high quality using this codebase!
 
 Steps to use:
+- Clone/download this repository
 - Download [PC-NSF-HiFiGAN](https://github.com/openvpi/vocoders/releases/tag/pc-nsf-hifigan-44.1k-hop512-128bin-2025.02) as a .zip file
 - Extract the .zip file
 - Open the config.json inside and add the following lines in the JSON near the bottom (within the curly braces):
