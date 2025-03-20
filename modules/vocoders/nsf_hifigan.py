@@ -1,5 +1,5 @@
 import pathlib
-
+import numpy as np
 import torch
 
 try:
@@ -55,7 +55,10 @@ class NsfHifiGAN(BaseVocoder):
         if self.h.fmax != hparams['fmax']:
             print('Mismatch parameters: hparams[\'fmax\']=', hparams['fmax'], '!=', self.h.fmax, '(vocoder)')
         with torch.no_grad():
-            c = mel.transpose(2, 1)  # [B, T, bins]
+            try:
+                c = mel.transpose(2, 1)  # [B, T, bins]
+            except:
+                c = torch.FloatTensor(mel).unsqueeze(0).transpose(2, 1).to(self.device)
             mel_base = hparams.get('mel_base', 10)
             if mel_base != 'e':
                 assert mel_base in [10, '10'], "mel_base must be 'e', '10' or 10."
@@ -63,6 +66,8 @@ class NsfHifiGAN(BaseVocoder):
                 c = 2.30259 * c
             f0 = kwargs.get('f0')  # [B, T]
             if f0 is not None:
+                if type(f0) == np.ndarray:
+                    f0 = torch.FloatTensor(f0[None, :]).to(self.device)
                 y = self.model(c, f0).view(-1)
             else:
                 y = self.model(c).view(-1)

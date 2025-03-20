@@ -1,4 +1,34 @@
-# DiffSinger (OpenVPI maintained version)
+# High-Quality Voice Pitch Transposition using DiffSinger (OpenVPI maintained version)
+
+With the recent release of [PC-NSF-HiFiGAN](https://github.com/openvpi/vocoders/releases/tag/pc-nsf-hifigan-44.1k-hop512-128bin-2025.02), it is possible to pitch-shift any vocals or periodic audio
+with reasonably high quality using this codebase!
+
+Steps to use:
+- Download [PC-NSF-HiFiGAN](https://github.com/openvpi/vocoders/releases/tag/pc-nsf-hifigan-44.1k-hop512-128bin-2025.02) as a .zip file
+- Extract the .zip file
+- Open the config.json inside and add the following lines in the JSON near the bottom (within the curly braces):
+  ```
+  "audio_sample_rate": 44100,
+  "num_mels": 128,
+  "audio_num_mel_bins": 128,
+  "hop_size": 512,
+  "fft_size": 2048,
+  "win_size": 2048,
+  "fmin": 40,
+  "fmax": 16000,
+  "mel_fmin": 40,
+  "mel_fmax": 16000,
+  "mel_base": "e",
+  "mel_scale": "slaney"
+  ```
+- Download the RMVPE pitch detection model from [here](https://github.com/yxlllc/RMVPE/releases) and extract the .zip file
+- In scripts, run the pitch_transpose.py script using the following syntax: `python3 pitch_transpose.py --pitchalgo rmvpe --rmvpeckpt <model.pt inside RMVPE folder> --transpose <pitch in semitones> --config <config.json inside PC-NSF-HiFiGAN folder> --ckpt <model.ckpt inside PC-NSF-HiFiGAN folder> <input file>`
+
+The output is formatted `filename-nsfhifigan-2.0-out.wav` where "filename" is the input filename minus the .wav and 2.0 is the pitch transposed in semitones.
+
+You can also choose to use the WORLD vocoder by adding the argument `--method world`, which is lower quality but does not rely on machine learning.
+
+## Original README below:
 
 [![arXiv](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](https://arxiv.org/abs/2105.02446)
 [![downloads](https://img.shields.io/github/downloads/openvpi/DiffSinger/total.svg)](https://github.com/openvpi/DiffSinger/releases)
